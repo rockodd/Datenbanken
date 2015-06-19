@@ -1,4 +1,7 @@
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.*;
+import java.util.Properties;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartFrame;
@@ -9,23 +12,32 @@ import org.jfree.ui.RefineryUtilities;
 public class connectTest {
 
 	public static void main(String args[]) {
+		// zugriff auf config.property
+		Properties props = new Properties();
+		try {
+			props.load(new FileInputStream("config.properties"));
+		} catch (IOException e1) {
+			System.out.println("Fehler beim einlesen der Config.properties :");
+			System.out.println(e1);
+		}
 
-		String url = "jdbc:oracle:thin:@dbl43.beuth-hochschule.de:1521:oracle";
+		String url = props.getProperty("URL");
+		System.out.println(url);
 		Connection con;
-		String query = "Select loc.CITY, Count(*) From VACATIONREQUEST vaq INNER JOIN LOCATIONS loc ON CONTAINS(vaq.QUERYTEXT, LOWER(loc.CITY), 1) > 0 Group By loc.CITY Order By Count(*) DESC";
-				
-//				"Select loc.CITY, Count(*) " 
-//				+ "From VACATIONREQUEST vaq "
-//				+ "INNER JOIN LOCATIONS loc "
-//				+ "ON CONTAINS(vaq.QUERYTEXT, LOWER(loc.CITY), 1) > 0 "
-//				+ "Group By loc.CITY " + "Order By Count(*) DESC;"
-//				;
+		String query = "Select loc.CITY, Count(*) From VACATIONREQUEST vaq INNER JOIN LOCATION loc ON CONTAINS(vaq.QUERYTEXT, LOWER(loc.CITY), 1) > 0 Group By loc.CITY Order By Count(*) DESC";
+
+		// "Select loc.CITY, Count(*) "
+		// + "From VACATIONREQUEST vaq "
+		// + "INNER JOIN LOCATIONS loc "
+		// + "ON CONTAINS(vaq.QUERYTEXT, LOWER(loc.CITY), 1) > 0 "
+		// + "Group By loc.CITY " + "Order By Count(*) DESC;"
+		// ;
 		Statement stmt;
-		
+
 		DefaultPieDataset pieDataset = new DefaultPieDataset();
 
 		try {
-			Class.forName("oracle.jdbc.driver.OracleDriver");
+			Class.forName(props.getProperty("DRV"));
 
 		} catch (java.lang.ClassNotFoundException e) {
 			System.err.print("ClassNotFoundException: ");
@@ -33,7 +45,8 @@ public class connectTest {
 		}
 
 		try {
-			con = DriverManager.getConnection(url, "ullmann", "HIGHscreen");
+			con = DriverManager.getConnection(url, props.getProperty("USR"),
+					props.getProperty("PW"));
 
 			stmt = con.createStatement();
 			System.out.println(query);
@@ -41,7 +54,7 @@ public class connectTest {
 			ResultSet rs = stmt.executeQuery(query);
 			System.out.println("sql executed");
 			ResultSetMetaData rsmd = rs.getMetaData();
-			
+
 			PrintColumnTypes.printColTypes(rsmd);
 			System.out.println("");
 
@@ -54,25 +67,25 @@ public class connectTest {
 				System.out.print(columnName);
 			}
 			System.out.println("");
-			
+
 			String dataname = "leer";
 
 			while (rs.next()) {
 				for (int i = 1; i <= numberOfColumns; i++) {
 					if (i > 1)
 						System.out.print(",  ");
-					
+
 					String columnValue = rs.getString(i);
 
 					int a = 0;
-					if (i == 1) 
+					if (i == 1)
 						dataname = columnValue;
-					else{
-						a = (int) (Float.valueOf(columnValue)).floatValue(); 
-						//jfreechart
+					else {
+						a = (int) (Float.valueOf(columnValue)).floatValue();
+						// jfreechart
 					}
 					pieDataset.setValue(dataname, a);
-					
+
 					System.out.print(columnValue);
 				}
 				System.out.println("");
@@ -85,19 +98,20 @@ public class connectTest {
 			System.err.println(ex.getMessage());
 		}
 
-	
-	JFreeChart chart = ChartFactory.createPieChart("Welche 5 Städte wurden am häufigsten im Zusammenhang mit Vacation gesucht", // Title
-			pieDataset, // Dataset
-			true,// legend
-			true,// tooltips
-			true// URL
-			);
+		JFreeChart chart = ChartFactory
+				.createPieChart(
+						"Welche 5 Städte wurden am häufigsten im Zusammenhang mit Vacation gesucht", // Title
+						pieDataset, // Dataset
+						true,// legend
+						true,// tooltips
+						true// URL
+				);
 
-	// create and display a frame...
-	ChartFrame frame = new ChartFrame("Example", chart);
-	frame.pack();
-	RefineryUtilities.centerFrameOnScreen(frame);
-	frame.setVisible(true);
+		// create and display a frame...
+		ChartFrame frame = new ChartFrame("Aufgabe 1", chart);
+		frame.pack();
+		RefineryUtilities.centerFrameOnScreen(frame);
+		frame.setVisible(true);
 	}
 }
 
