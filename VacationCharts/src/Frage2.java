@@ -6,10 +6,11 @@ import java.util.Properties;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartFrame;
 import org.jfree.chart.JFreeChart;
-import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.ui.RefineryUtilities;
 
-public class CopyOfconnectTestFrage3 {
+public class Frage2 {
 
 	public static void main(String args[]) {
 		// zugriff auf config.property
@@ -24,7 +25,7 @@ public class CopyOfconnectTestFrage3 {
 		String url = props.getProperty("URL");
 		System.out.println(url);
 		Connection con;
-		String query = "Select to_char(reqtime, 'MM') as monat, Count(*) From VACATIONREQUEST Group By to_char(reqtime, 'MM') Order By to_char(reqtime, 'MM') ASC";
+		String query = "Select loc.STATE, Count(*) From VACATIONREQUEST vaq INNER JOIN LOCATION loc ON CONTAINS(vaq.QUERYTEXT, LOWER(loc.STATE), 1) > 0 Group By loc.STATE Order By Count(*) DESC";
 
 		// "Select loc.CITY, Count(*) "
 		// + "From VACATIONREQUEST vaq "
@@ -34,7 +35,7 @@ public class CopyOfconnectTestFrage3 {
 		// ;
 		Statement stmt;
 
-		DefaultPieDataset pieDataset = new DefaultPieDataset();
+		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
 		try {
 			Class.forName(props.getProperty("DRV"));
@@ -84,7 +85,8 @@ public class CopyOfconnectTestFrage3 {
 						a = (int) (Float.valueOf(columnValue)).floatValue();
 						// jfreechart
 					}
-					pieDataset.setValue(dataname, a);
+					dataset.setValue(a, dataname, "");
+
 
 					System.out.print(columnValue);
 				}
@@ -98,17 +100,13 @@ public class CopyOfconnectTestFrage3 {
 			System.err.println(ex.getMessage());
 		}
 
-		JFreeChart chart = ChartFactory
-				.createPieChart(
-						"In welchem Monat wurden die meisten Anfragen gestellt?", // Title
-						pieDataset, // Dataset
-						true,// legend
-						true,// tooltips
-						true// URL
-				);
+		JFreeChart chart = ChartFactory.createBarChart("Nach welchen 5 Bundesstaaten wird am häufigsten gesucht?",
+		"States", "Hits", dataset, PlotOrientation.VERTICAL,
+		true, true, true);
+			
 
 		// create and display a frame...
-		ChartFrame frame = new ChartFrame("Anfrage 3", chart);
+		ChartFrame frame = new ChartFrame("Anfrage 2", chart);
 		frame.pack();
 		RefineryUtilities.centerFrameOnScreen(frame);
 		frame.setVisible(true);

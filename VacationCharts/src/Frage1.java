@@ -9,7 +9,7 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.ui.RefineryUtilities;
 
-public class connectTest {
+public class Frage1 {
 
 	public static void main(String args[]) {
 		// zugriff auf config.property

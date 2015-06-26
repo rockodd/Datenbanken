@@ -6,7 +6,15 @@ import java.util.Properties;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartFrame;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.data.time.Day;
+import org.jfree.data.time.TimeSeries;
+import org.jfree.data.time.TimeSeriesCollection;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
+import org.jfree.ui.ApplicationFrame;
 import org.jfree.ui.RefineryUtilities;
 
 public class fCopyOfconnectTestFrage4 {
@@ -24,7 +32,7 @@ public class fCopyOfconnectTestFrage4 {
 		String url = props.getProperty("URL");
 		System.out.println(url);
 		Connection con;
-		String query = "Select to_char(reqtime, 'DAY') as stunde, Count(*) From VACATIONREQUEST Group By to_char(reqtime, 'DAY') Order By to_char(reqtime, 'DAY') ASC";
+		String query = "Select to_char(reqtime, 'Day') as TagS, Count(*), to_char(reqtime, 'D') as TAGE From VACATIONREQUEST Group By to_char(reqtime, 'D'),  to_char(reqtime, 'Day') ORDER BY TAGE asc";
 
 		// "Select loc.CITY, Count(*) "
 		// + "From VACATIONREQUEST vaq "
@@ -34,7 +42,8 @@ public class fCopyOfconnectTestFrage4 {
 		// ;
 		Statement stmt;
 
-		DefaultPieDataset pieDataset = new DefaultPieDataset();
+		XYSeries pop = new XYSeries("XYGraph");
+		DefaultCategoryDataset dataset = new DefaultCategoryDataset( );
 
 		try {
 			Class.forName(props.getProperty("DRV"));
@@ -55,7 +64,7 @@ public class fCopyOfconnectTestFrage4 {
 			System.out.println("sql executed");
 			ResultSetMetaData rsmd = rs.getMetaData();
 
-			PrintColumnTypes.printColTypes(rsmd);
+		//	PrintColumnTypes.printColTypes(rsmd);
 			System.out.println("");
 
 			int numberOfColumns = rsmd.getColumnCount();
@@ -69,28 +78,32 @@ public class fCopyOfconnectTestFrage4 {
 			System.out.println("");
 
 			String dataname = "leer";
-
+			
 			while (rs.next()) {
+				double a=0;
 				for (int i = 1; i <= numberOfColumns; i++) {
 					if (i > 1)
 						System.out.print(",  ");
 
 					String columnValue = rs.getString(i);
 
-					int a = 0;
+					
 					if (i == 1)
 						dataname = columnValue;
-					else {
-						a = (int) (Float.valueOf(columnValue)).floatValue();
+					else if(i == 2) {
+						a = (Float.valueOf(columnValue)).floatValue();
+						System.out.println(a);
 						// jfreechart
 					}
-					pieDataset.setValue(dataname, a);
+					
+					
 
 					System.out.print(columnValue);
 				}
+				dataset.addValue(a,"TAGE",dataname);
 				System.out.println("");
 			}
-
+			
 			stmt.close();
 			con.close();
 		} catch (SQLException ex) {
@@ -98,14 +111,17 @@ public class fCopyOfconnectTestFrage4 {
 			System.err.println(ex.getMessage());
 		}
 
-		JFreeChart chart = ChartFactory
-				.createPieChart(
-						"An welchem Tag wird am häufgisten der Urlaub geplant?", // Title
-						pieDataset, // Dataset
-						true,// legend
-						true,// tooltips
-						true// URL
-				);
+        final JFreeChart chart = ChartFactory.createLineChart(
+                "An welchem Tag wurde am häufigsten der Urlaub geplant?",       // chart title
+                "Wochentage",                    // domain axis label
+                "Hits",                   // range axis label
+                dataset,                   // data
+                PlotOrientation.VERTICAL,  // orientation
+                true,                      // include legend
+                true,                      // tooltips
+                false                      // urls
+            );
+				
 
 		// create and display a frame...
 		ChartFrame frame = new ChartFrame("Anfrage 4", chart);
