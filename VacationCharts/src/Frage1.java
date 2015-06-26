@@ -12,7 +12,7 @@ import org.jfree.ui.RefineryUtilities;
 public class Frage1 {
 
 	public static void main(String args[]) {
-		
+
 		Properties props = new Properties();
 		try {
 			props.load(new FileInputStream("config.properties"));
@@ -27,31 +27,26 @@ public class Frage1 {
 		String query = "Select loc.CITY, Count(*) From VACATIONREQUEST vaq INNER JOIN LOCATION loc ON CONTAINS(vaq.QUERYTEXT, LOWER(loc.CITY), 1) > 0 Group By loc.CITY Order By Count(*) DESC";
 
 		Statement stmt;
-
 		DefaultPieDataset pieDataset = new DefaultPieDataset();
-
 		try {
 			Class.forName(props.getProperty("DRV"));
-
-		} catch (java.lang.ClassNotFoundException e) {
+		}
+		catch (java.lang.ClassNotFoundException e) {
 			System.err.print("ClassNotFoundException: ");
 			System.err.println(e.getMessage());
 		}
-
 		try {
 			con = DriverManager.getConnection(url, props.getProperty("USR"),
 					props.getProperty("PW"));
-
 			stmt = con.createStatement();
 			System.out.println(query);
 
 			ResultSet rs = stmt.executeQuery(query);
 			System.out.println("sql executed");
 			ResultSetMetaData rsmd = rs.getMetaData();
+			//bis hier
 
-//			PrintColumnTypes.printColTypes(rsmd);
 			System.out.println("");
-
 			int numberOfColumns = rsmd.getColumnCount();
 
 			for (int i = 1; i <= numberOfColumns; i++) {
@@ -101,25 +96,9 @@ public class Frage1 {
 						true// URL
 				);
 
-		
 		ChartFrame frame = new ChartFrame("Aufgabe 1", chart);
 		frame.pack();
 		RefineryUtilities.centerFrameOnScreen(frame);
 		frame.setVisible(true);
 	}
 }
-
-//class PrintColumnTypes {
-//
-//	public static void printColTypes(ResultSetMetaData rsmd)
-//			throws SQLException {
-//		int columns = rsmd.getColumnCount();
-//		for (int i = 1; i <= columns; i++) {
-//			int jdbcType = rsmd.getColumnType(i);
-//			String name = rsmd.getColumnTypeName(i);
-//			System.out.print("Column " + i + " is JDBC type " + jdbcType);
-//			System.out.println(", which the DBMS calls " + name);
-//		}
-//	}
-
-//}
