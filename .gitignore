@@ -16,7 +16,6 @@ target/
 ######################
  
 *.pydevproject
-.project
 .metadata
 bin/**
 tmp/**
@@ -30,8 +29,6 @@ local.properties
 .settings/
 .loadpath
 /src/main/resources/rebel.xml
-# External tool builders
-.externalToolBuilders/
 
 ######################
 # Mobile Tools for Java (J2ME)
