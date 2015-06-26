@@ -12,7 +12,7 @@ import org.jfree.ui.RefineryUtilities;
 public class Frage1 {
 
 	public static void main(String args[]) {
-		// zugriff auf config.property
+		
 		Properties props = new Properties();
 		try {
 			props.load(new FileInputStream("config.properties"));
@@ -26,12 +26,6 @@ public class Frage1 {
 		Connection con;
 		String query = "Select loc.CITY, Count(*) From VACATIONREQUEST vaq INNER JOIN LOCATION loc ON CONTAINS(vaq.QUERYTEXT, LOWER(loc.CITY), 1) > 0 Group By loc.CITY Order By Count(*) DESC";
 
-		// "Select loc.CITY, Count(*) "
-		// + "From VACATIONREQUEST vaq "
-		// + "INNER JOIN LOCATIONS loc "
-		// + "ON CONTAINS(vaq.QUERYTEXT, LOWER(loc.CITY), 1) > 0 "
-		// + "Group By loc.CITY " + "Order By Count(*) DESC;"
-		// ;
 		Statement stmt;
 
 		DefaultPieDataset pieDataset = new DefaultPieDataset();
@@ -55,7 +49,7 @@ public class Frage1 {
 			System.out.println("sql executed");
 			ResultSetMetaData rsmd = rs.getMetaData();
 
-			PrintColumnTypes.printColTypes(rsmd);
+//			PrintColumnTypes.printColTypes(rsmd);
 			System.out.println("");
 
 			int numberOfColumns = rsmd.getColumnCount();
@@ -107,7 +101,7 @@ public class Frage1 {
 						true// URL
 				);
 
-		// create and display a frame...
+		
 		ChartFrame frame = new ChartFrame("Aufgabe 1", chart);
 		frame.pack();
 		RefineryUtilities.centerFrameOnScreen(frame);
@@ -115,17 +109,17 @@ public class Frage1 {
 	}
 }
 
-class PrintColumnTypes {
+//class PrintColumnTypes {
+//
+//	public static void printColTypes(ResultSetMetaData rsmd)
+//			throws SQLException {
+//		int columns = rsmd.getColumnCount();
+//		for (int i = 1; i <= columns; i++) {
+//			int jdbcType = rsmd.getColumnType(i);
+//			String name = rsmd.getColumnTypeName(i);
+//			System.out.print("Column " + i + " is JDBC type " + jdbcType);
+//			System.out.println(", which the DBMS calls " + name);
+//		}
+//	}
 
-	public static void printColTypes(ResultSetMetaData rsmd)
-			throws SQLException {
-		int columns = rsmd.getColumnCount();
-		for (int i = 1; i <= columns; i++) {
-			int jdbcType = rsmd.getColumnType(i);
-			String name = rsmd.getColumnTypeName(i);
-			System.out.print("Column " + i + " is JDBC type " + jdbcType);
-			System.out.println(", which the DBMS calls " + name);
-		}
-	}
-
-}
+//}
