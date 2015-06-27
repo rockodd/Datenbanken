@@ -96,7 +96,7 @@ public class Frage1 {
 						true// URL
 				);
 
-		ChartFrame frame = new ChartFrame("Aufgabe 1", chart);
+		ChartFrame frame = new ChartFrame("Anfrage 1", chart);
 		frame.pack();
 		RefineryUtilities.centerFrameOnScreen(frame);
 		frame.setVisible(true);

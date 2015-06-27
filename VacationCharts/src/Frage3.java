@@ -108,7 +108,7 @@ public class Frage3 {
 			
 
 		// create and display a frame...
-		ChartFrame frame = new ChartFrame("Anfrage 2", chart);
+		ChartFrame frame = new ChartFrame("Anfrage 3", chart);
 		frame.pack();
 		RefineryUtilities.centerFrameOnScreen(frame);
 		frame.setVisible(true);
