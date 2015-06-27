@@ -100,7 +100,7 @@ public class Frage7 {
 
 		JFreeChart chart = ChartFactory
 				.createPieChart(
-						"Welche 5 Städte wurden am häufigsten im Zusammenhang mit Vacation gesucht", // Title
+						"Wie viele User informieren sich vor ihrer Reise über das Wetter?", // Title
 						pieDataset, // Dataset
 						true,// legend
 						true,// tooltips

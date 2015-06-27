@@ -9,7 +9,7 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.ui.RefineryUtilities;
 
-public class CopyOfconnectTestFrage7 {
+public class Frage10 {
 
 	public static void main(String args[]) {
 		// zugriff auf config.property
@@ -24,7 +24,7 @@ public class CopyOfconnectTestFrage7 {
 		String url = props.getProperty("URL");
 		System.out.println(url);
 		Connection con;
-		String query = "Select Count(*) From VACATIONREQUEST vaq Where Contains(QUERYTEXT,'weather')>0";
+		String query = "Select a.CLICKURL,Count(*) From AOLDATA.QUERYDATA_IDX a, REQUESTSHAPE r where Contains(a.QUERY,r.requesttext,1)>0  AND a.CLICKURL is not null Group by a.CLICKURL order by Count(*) DESC";
 
 		// "Select loc.CITY, Count(*) "
 		// + "From VACATIONREQUEST vaq "
@@ -100,7 +100,7 @@ public class CopyOfconnectTestFrage7 {
 
 		JFreeChart chart = ChartFactory
 				.createPieChart(
-						"Wie viele User informieren sich vor ihrer Reise über das Wetter?", // Title
+						"Welche Unterkunftssuchen werden zur Unterkunftssuche bevorzugt", // Title
 						pieDataset, // Dataset
 						true,// legend
 						true,// tooltips
@@ -108,7 +108,7 @@ public class CopyOfconnectTestFrage7 {
 				);
 
 		// create and display a frame...
-		ChartFrame frame = new ChartFrame("Anfrage 7", chart);
+		ChartFrame frame = new ChartFrame("Anfrage 10", chart);
 		frame.pack();
 		RefineryUtilities.centerFrameOnScreen(frame);
 		frame.setVisible(true);
