@@ -18,7 +18,7 @@
 		<link>
 			<name>src/config.properties</name>
 			<type>1</type>
-			<locationURI>PROJECT_LOC/config.properties</locationURI>
+			<location>C:/Users/Marlon/git/Datenbanken/config.properties</location>
 		</link>
 	</linkedResources>
 </projectDescription>
